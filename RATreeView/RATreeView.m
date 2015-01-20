@@ -1,112 +1,38 @@
 
-//The MIT License (MIT)
-//
-//Copyright (c) 2014 Rafał Augustyniak
-//
-//Permission is hereby granted, free of charge, to any person obtaining a copy of
-//this software and associated documentation files (the "Software"), to deal in
-//the Software without restriction, including without limitation the rights to
-//use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-//the Software, and to permit persons to whom the Software is furnished to do so,
-//subject to the following conditions:
-//
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-//FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-//COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-//IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-//CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-
-
 #import "RATreeView.h"
 #import "RATreeView_ClassExtension.h"
 #import "RATreeView+Enums.h"
 #import "RATreeView+Private.h"
 #import "RATreeView+UIScrollView.h"
-
 #import "RABatchChanges.h"
-
 #import "RATreeNodeCollectionController.h"
 #import "RATreeNode.h"
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
 @implementation RATreeView
 #pragma clang diagnostic pop
-
 //Managing the Display of Content
-@dynamic contentOffset;
-@dynamic contentSize;
-@dynamic contentInset;
-
+@dynamic contentOffset, contentSize, contentInset;
 //Managing Scrolling
-@dynamic scrollEnabled;
-@dynamic directionalLockEnabled;
-@dynamic scrollsToTop;
-@dynamic pagingEnabled;
-@dynamic bounces;
-@dynamic alwaysBounceVertical;
-@dynamic alwaysBounceHorizontal;
-@dynamic canCancelContentTouches;
-@dynamic delaysContentTouches;
-@dynamic decelerationRate;
-@dynamic dragging;
-@dynamic tracking;
-@dynamic decelerating;
-
+@dynamic scrollEnabled, directionalLockEnabled, scrollsToTop, pagingEnabled, bounces, alwaysBounceVertical, alwaysBounceHorizontal, canCancelContentTouches, delaysContentTouches, decelerationRate, dragging, tracking, decelerating;
 //Managing the Scroll Indicator
-@dynamic indicatorStyle;
-@dynamic scrollIndicatorInsets;
-@dynamic showsHorizontalScrollIndicator;
-@dynamic showsVerticalScrollIndicator;
+@dynamic indicatorStyle, scrollIndicatorInsets, showsHorizontalScrollIndicator, showsVerticalScrollIndicator;
 //- (void)flashScrollIndicators;
-
 //Zooming and Panning
-@dynamic panGestureRecognizer;
-@dynamic pinchGestureRecognizer;
-@dynamic zoomScale;
-@dynamic maximumZoomScale;
-@dynamic minimumZoomScale;
-@dynamic zoomBouncing;
-@dynamic zooming;
-@dynamic bouncesZoom;
-
-
+@dynamic panGestureRecognizer, pinchGestureRecognizer, zoomScale, maximumZoomScale, minimumZoomScale, zoomBouncing, zooming, bouncesZoom;
 #pragma mark Initializing a TreeView Object
-
-- (id)init
-{
+- init {
   return [self initWithFrame:CGRectMake(0, 0, 100, 100) style:RATreeViewStylePlain];
 }
-
-- (id)initWithFrame:(CGRect)frame
-{
+- initWithFrame:(CGRect)frame {
   return [self initWithFrame:frame style:RATreeViewStylePlain];
 }
-
-- (id)initWithFrame:(CGRect)frame style:(RATreeViewStyle)style
-{
-  self = [super initWithFrame:frame];
-  if (self) {
-    CGRect innerFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    [self commonInitWithFrame:innerFrame style:style];
-  }
-  return self;
+- initWithFrame:(CGRect)frame style:(RATreeViewStyle)style {
+  return self = [super initWithFrame:frame] ? [self commonInitWithFrame:(CGRect){CGPointZero,self.bounds.size} style:style], self : nil;
 }
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-  self = [super initWithCoder:aDecoder];
-  if (self) {
-    CGRect innerFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    [self commonInitWithFrame:innerFrame style:RATreeViewStylePlain];
-  }
-  return self;
-}
-
-- (void)commonInitWithFrame:(CGRect)frame style:(RATreeViewStyle)style
-{
+- initWithCoder:(NSCoder*)aDecoder { return self = [super initWithCoder:aDecoder] ? [self commonInitWithFrame:(CGRect){CGPointZero,self.bounds.size} style:RATreeViewStylePlain], self : nil; }
+- (void)commonInitWithFrame:(CGRect)frame style:(RATreeViewStyle)style {
+  self.backgroundColor = UIColor.redColor;
   UITableViewStyle tableViewStyle = [RATreeView tableViewStyleForTreeViewStyle:style];
   
   UITableView *tableView =  [[UITableView alloc] initWithFrame:frame style:tableViewStyle];
@@ -120,93 +46,57 @@
   self.rowsExpandingAnimation = RATreeViewRowAnimationTop;
   self.rowsCollapsingAnimation = RATreeViewRowAnimationBottom;
 }
-
-
 #pragma mark Configuring a Tree View
-
-- (NSInteger)numberOfRows
-{
+- (NSInteger)numberOfRows {
   return [self.tableView numberOfRowsInSection:0];
 }
-
-- (RATreeViewStyle)style
-{
+- (RATreeViewStyle)style {
   UITableViewStyle tableViewStyle = self.tableView.style;
   return [RATreeView treeViewStyleForTableViewStyle:tableViewStyle];
 }
-
-- (RATreeViewCellSeparatorStyle)separatorStyle
-{
+- (RATreeViewCellSeparatorStyle)separatorStyle {
   RATreeViewCellSeparatorStyle style = [RATreeView treeViewCellSeparatorStyleForTableViewSeparatorStyle:self.tableView.separatorStyle];
   return style;
 }
-
-- (void)setSeparatorStyle:(RATreeViewCellSeparatorStyle)separatorStyle
-{
+- (void)setSeparatorStyle:(RATreeViewCellSeparatorStyle)separatorStyle {
   UITableViewCellSeparatorStyle tableViewSeparatorStyle = [RATreeView tableViewCellSeparatorStyleForTreeViewCellSeparatorStyle:separatorStyle];
   self.tableView.separatorStyle = tableViewSeparatorStyle;
 }
-
-- (UIColor *)separatorColor
-{
+- (UIColor*)separatorColor {
   return self.tableView.separatorColor;
 }
-
-- (void)setSeparatorColor:(UIColor *)separatorColor
-{
+- (void)setSeparatorColor:(UIColor*)separatorColor {
   self.tableView.separatorColor = separatorColor;
 }
-
-- (CGFloat)rowHeight
-{
+- (CGFloat)rowHeight {
   return self.tableView.rowHeight;
 }
-
-- (void)setRowHeight:(CGFloat)rowHeight
-{
+- (void)setRowHeight:(CGFloat)rowHeight {
   self.tableView.rowHeight = rowHeight;
 }
-
-- (CGFloat)estimatedRowHeight
-{
+- (CGFloat)estimatedRowHeight {
   return self.tableView.estimatedRowHeight;
 }
-
-- (void)setEstimatedRowHeight:(CGFloat)estimatedRowHeight
-{
+- (void)setEstimatedRowHeight:(CGFloat)estimatedRowHeight {
   self.tableView.estimatedRowHeight = estimatedRowHeight;
 }
-
-- (UIEdgeInsets)separatorInset
-{
+- (UIEdgeInsets)separatorInset {
   return self.tableView.separatorInset;
 }
-
-- (void)setSeparatorInset:(UIEdgeInsets)separatorInset
-{
+- (void)setSeparatorInset:(UIEdgeInsets)separatorInset {
   self.tableView.separatorInset = separatorInset;
 }
-
-- (UIView *)backgroundView
-{
+- (UIView*)backgroundView {
   return self.tableView.backgroundView;
 }
-
-- (void)setBackgroundView:(UIView *)backgroundView
-{
+- (void)setBackgroundView:(UIView*)backgroundView {
   self.tableView.backgroundView = backgroundView;
 }
-
-
 #pragma mark Expanding and Collapsing Rows
-
-- (void)expandRowForItem:(id)item
-{
+- (void)expandRowForItem:item {
   [self expandRowForItem:item withRowAnimation:self.rowsExpandingAnimation];
 }
-
-- (void)expandRowForItem:(id)item withRowAnimation:(RATreeViewRowAnimation)animation
-{
+- (void)expandRowForItem:item withRowAnimation:(RATreeViewRowAnimation)animation {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   RATreeNode *treeNode = [self treeNodeForIndexPath:indexPath];
   if (treeNode.expanded) {
@@ -214,36 +104,24 @@
   }
   [self expandCellForTreeNode:treeNode withRowAnimation:animation];
 }
-
-- (void)collapseRowForItem:(id)item
-{
+- (void)collapseRowForItem:item {
   [self collapseRowForItem:item withRowAnimation:self.rowsCollapsingAnimation];
 }
-
-- (void)collapseRowForItem:(id)item withRowAnimation:(RATreeViewRowAnimation)animation
-{
+- (void)collapseRowForItem:item withRowAnimation:(RATreeViewRowAnimation)animation {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   RATreeNode *treeNode = [self treeNodeForIndexPath:indexPath];
   [self collapseCellForTreeNode:treeNode withRowAnimation:animation];
 }
-
-
 #pragma mark - Changing tree's structure
-
-- (void)beginUpdates
-{
+- (void)beginUpdates {
   [self.tableView beginUpdates];
   [self.batchChanges beginUpdates];
 }
-
-- (void)endUpdates
-{
+- (void)endUpdates {
   [self.batchChanges endUpdates];
   [self.tableView endUpdates];
 }
-
-- (void)insertItemsAtIndexes:(NSIndexSet *)indexes inParent:(id)parent withAnimation:(RATreeViewRowAnimation)animation
-{
+- (void)insertItemsAtIndexes:(NSIndexSet*)indexes inParent:(id)parent withAnimation:(RATreeViewRowAnimation)animation {
   if (parent && ![self isCellForItemExpanded:parent]) {
     return;
   }
@@ -252,9 +130,7 @@
     [weakSelf insertItemAtIndex:idx inParent:parent withAnimation:animation];
   }];
 }
-
-- (void)deleteItemsAtIndexes:(NSIndexSet *)indexes inParent:(id)parent withAnimation:(RATreeViewRowAnimation)animation
-{
+- (void)deleteItemsAtIndexes:(NSIndexSet*)indexes inParent:(id)parent withAnimation:(RATreeViewRowAnimation)animation {
   if (parent && ![self isCellForItemExpanded:parent]) {
     return;
   }
@@ -263,249 +139,147 @@
     [weakSelf removeItemAtIndex:idx inParent:parent withAnimation:animation];
   }];
 }
-
-
 #pragma mark - Creating Table View Cells
-
-- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier
-{
+- (void)registerNib:(UINib*)nib forCellReuseIdentifier:(NSString*)identifier {
   [self.tableView registerNib:nib forCellReuseIdentifier:identifier];
 }
-
-- (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier
-{
+- (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString*)identifier {
   [self.tableView registerClass:cellClass forCellReuseIdentifier:identifier];
 }
-
-- (id)dequeueReusableCellWithIdentifier:(NSString *)identifier
-{
+- dequeueReusableCellWithIdentifier:(NSString*)identifier {
   return [self.tableView dequeueReusableCellWithIdentifier:identifier];
 }
-
-
 #pragma mark - Accessing Header and Footer Views
-
-- (void)registerNib:(UINib *)nib forHeaderFooterViewReuseIdentifier:(NSString *)identifier
-{
+- (void)registerNib:(UINib*)nib forHeaderFooterViewReuseIdentifier:(NSString*)identifier {
   [self.tableView registerNib:nib forHeaderFooterViewReuseIdentifier:identifier];
 }
-
-- (void)registerClass:(Class)aClass forHeaderFooterViewReuseIdentifier:(NSString *)identifier
-{
+- (void)registerClass:(Class)aClass forHeaderFooterViewReuseIdentifier:(NSString*)identifier {
   [self.tableView registerClass:aClass forHeaderFooterViewReuseIdentifier:identifier];
 }
-
-- (id)dequeueReusableHeaderFooterViewWithIdentifier:(NSString *)identifier
-{
+- dequeueReusableHeaderFooterViewWithIdentifier:(NSString*)identifier {
   return [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
 }
-
-- (UIView *)treeHeaderView
-{
+- (UIView*)treeHeaderView {
   return self.tableView.tableHeaderView;
 }
-
-- (void)setTreeHeaderView:(UIView *)treeHeaderView
-{
+- (void)setTreeHeaderView:(UIView*)treeHeaderView {
   self.tableView.tableHeaderView = treeHeaderView;
 }
-
-- (UIView *)treeFooterView
-{
+- (UIView*)treeFooterView {
   return self.tableView.tableFooterView;
 }
-
-- (void)setTreeFooterView:(UIView *)treeFooterView
-{
+- (void)setTreeFooterView:(UIView*)treeFooterView {
   self.tableView.tableFooterView = treeFooterView;
 }
-
-
 #pragma mark - Working with Expandability
-
-- (BOOL)isCellForItemExpanded:(id)item
-{
+- (BOOL)isCellForItemExpanded:item {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   return [self treeNodeForIndexPath:indexPath].expanded;
 }
-
-- (BOOL)isCellExpanded:(UITableViewCell *)cell
-{
+- (BOOL)isCellExpanded:(UITableViewCell*)cell {
   id item = [self itemForCell:cell];
   return [self isCellForItemExpanded:item];
 }
-
 #pragma mark - Working with Indentation
-
-- (NSInteger)levelForCellForItem:(id)item
-{
+- (NSInteger)levelForCellForItem:item {
   return [self.treeNodeCollectionController levelForItem:item];
 }
-
-- (NSInteger)levelForCell:(UITableViewCell *)cell
-{
+- (NSInteger)levelForCell:(UITableViewCell*)cell {
   id item = [self itemForCell:cell];
   return [self levelForCellForItem:item];
 }
-
 #pragma mark - Getting the Parent for an Item
-
-- (id)parentForItem:(id)item
-{
+- parentForItem:item {
   return [self.treeNodeCollectionController parentForItem:item];
 }
-
-
 #pragma mark - Accessing Cells
-
-- (UITableViewCell *)cellForItem:(id)item
-{
+- (UITableViewCell*)cellForItem:item {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   return [self.tableView cellForRowAtIndexPath:indexPath];
 }
-
-- (NSArray *)visibleCells
-{
+- (NSArray*)visibleCells {
   return [self.tableView visibleCells];
 }
-
-- (id)itemForCell:(UITableViewCell *)cell
-{
+- itemForCell:(UITableViewCell*)cell {
   NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
   return [self treeNodeForIndexPath:indexPath].item;
 }
-
-- (id)itemForRowAtPoint:(CGPoint)point
-{
+- itemForRowAtPoint:(CGPoint)point {
   NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
   return !indexPath ? nil : [self treeNodeForIndexPath:indexPath].item;
 }
-
-- (id)itemsForRowsInRect:(CGRect)rect
-{
+- itemsForRowsInRect:(CGRect)rect {
   NSArray *indexPaths = [self.tableView indexPathsForRowsInRect:rect];
   return [self itemsForIndexPaths:indexPaths];
 }
-
-- (NSArray *)itemsForVisibleRows
-{
+- (NSArray*)itemsForVisibleRows {
   NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
   return [self itemsForIndexPaths:indexPaths];
 }
-
-
 #pragma mark - Scrolling the TreeView
-
-- (void)scrollToRowForItem:(id)item atScrollPosition:(RATreeViewScrollPosition)scrollPosition animated:(BOOL)animated
-{
+- (void)scrollToRowForItem:item atScrollPosition:(RATreeViewScrollPosition)scrollPosition animated:(BOOL)animated {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   UITableViewScrollPosition tableViewScrollPosition = [RATreeView tableViewScrollPositionForTreeViewScrollPosition:scrollPosition];
   [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:tableViewScrollPosition animated:animated];
 }
-
-- (void)scrollToNearestSelectedRowAtScrollPosition:(RATreeViewScrollPosition)scrollPosition animated:(BOOL)animated
-{
+- (void)scrollToNearestSelectedRowAtScrollPosition:(RATreeViewScrollPosition)scrollPosition animated:(BOOL)animated {
   UITableViewScrollPosition tableViewScrollPosition = [RATreeView tableViewScrollPositionForTreeViewScrollPosition:scrollPosition];
   [self.tableView scrollToNearestSelectedRowAtScrollPosition:tableViewScrollPosition animated:animated];
 }
-
-
 #pragma mark - Managing Selections
-
-- (id)itemForSelectedRow
-{
-  NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-  return [self treeNodeForIndexPath:indexPath].item;
+- itemForSelectedRow {
+  return [self treeNodeForIndexPath:[self.tableView indexPathForSelectedRow]].item;
 }
-
-- (NSArray *)itemsForSelectedRows
-{
-  NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
-  return [self itemsForIndexPaths:selectedRows];
-}
-
-- (void)selectRowForItem:(id)item animated:(BOOL)animated scrollPosition:(RATreeViewScrollPosition)scrollPosition
-{
+- (NSArray*)itemsForSelectedRows { return [self itemsForIndexPaths:/* selectedRows */[self.tableView indexPathsForSelectedRows]]; }
+- (void)selectRowForItem:item animated:(BOOL)animated scrollPosition:(RATreeViewScrollPosition)scrollPosition {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   UITableViewScrollPosition tableViewScrollPosition = [RATreeView tableViewScrollPositionForTreeViewScrollPosition:scrollPosition];
   [self.tableView selectRowAtIndexPath:indexPath animated:animated scrollPosition:tableViewScrollPosition];
 }
-
-- (void)deselectRowForItem:(id)item animated:(BOOL)animated
-{
+- (void)deselectRowForItem:item animated:(BOOL)animated {
   NSIndexPath *indexPath = [self indexPathForItem:item];
   [self.tableView deselectRowAtIndexPath:indexPath animated:animated];
 }
-
-- (BOOL)allowsSelection
-{
+- (BOOL)allowsSelection {
   return self.tableView.allowsSelection;
 }
-
-- (void)setAllowsSelection:(BOOL)allowsSelection
-{
+- (void)setAllowsSelection:(BOOL)allowsSelection {
   self.tableView.allowsSelection = allowsSelection;
 }
-
-- (BOOL)allowsMultipleSelection
-{
+- (BOOL)allowsMultipleSelection {
   return self.tableView.allowsMultipleSelection;
 }
-
-- (void)setAllowsMultipleSelection:(BOOL)allowsMultipleSelection
-{
+- (void)setAllowsMultipleSelection:(BOOL)allowsMultipleSelection {
   self.tableView.allowsMultipleSelection = allowsMultipleSelection;
 }
-
-- (BOOL)allowsSelectionDuringEditing
-{
+- (BOOL)allowsSelectionDuringEditing {
   return self.tableView.allowsSelectionDuringEditing;
 }
-
-- (void)setAllowsSelectionDuringEditing:(BOOL)allowsSelectionDuringEditing
-{
+- (void)setAllowsSelectionDuringEditing:(BOOL)allowsSelectionDuringEditing {
   self.tableView.allowsSelectionDuringEditing = allowsSelectionDuringEditing;
 }
-
-- (BOOL)allowsMultipleSelectionDuringEditing
-{
+- (BOOL)allowsMultipleSelectionDuringEditing {
   return self.tableView.allowsMultipleSelectionDuringEditing;
 }
-
-- (void)setAllowsMultipleSelectionDuringEditing:(BOOL)allowsMultipleSelectionDuringEditing
-{
+- (void)setAllowsMultipleSelectionDuringEditing:(BOOL)allowsMultipleSelectionDuringEditing {
   self.tableView.allowsMultipleSelectionDuringEditing = allowsMultipleSelectionDuringEditing;
 }
-
-
 #pragma mark - Managing the Editing of Tree Cells
-
-- (BOOL)isEditing
-{
+- (BOOL)isEditing {
   return self.tableView.isEditing;
 }
-
-- (void)setEditing:(BOOL)editing
-{
+- (void)setEditing:(BOOL)editing {
   self.tableView.editing = editing;
 }
-
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated
-{
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
   [self.tableView setEditing:editing animated:animated];
 }
-
-
 #pragma mark - Reloading the Tree View
-
-- (void)reloadData
-{
+- (void)reloadData {
   [self setupTreeStructure];
   [self.tableView reloadData];
 }
-
-- (void)reloadRowsForItems:(NSArray *)items withRowAnimation:(RATreeViewRowAnimation)animation
-{
+- (void)reloadRowsForItems:(NSArray*)items withRowAnimation:(RATreeViewRowAnimation)animation {
   NSMutableArray *indexes = [NSMutableArray array];
   UITableViewRowAnimation tableViewRowAnimation = [RATreeView tableViewRowAnimationForTreeViewRowAnimation:animation];
   for (id item in items) {
@@ -515,52 +289,47 @@
   
   [self.tableView reloadRowsAtIndexPaths:indexes withRowAnimation:tableViewRowAnimation];
 }
-
-- (void)reloadRows
-{
+- (void)reloadRows {
   NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:0];
   [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
 }
-
-
 #pragma mark - UIScrollView's properties
-
-- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated
-{
+- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
   [self.tableView setContentOffset:contentOffset animated:animated];
 }
-
-- (void)scrollRectToVisible:(CGRect)visible animated:(BOOL)animated
-{
+- (void)scrollRectToVisible:(CGRect)visible animated:(BOOL)animated {
   [self.tableView scrollRectToVisible:visible animated:animated];
 }
-
-- (void)setZoomScale:(CGFloat)zoomScale animated:(BOOL)animated
-{
+- (void)setZoomScale:(CGFloat)zoomScale animated:(BOOL)animated {
   [self.tableView setZoomScale:zoomScale animated:animated];
 }
-
-- (void)flashScrollIndicators
-{
+- (void)flashScrollIndicators {
   [self.tableView flashScrollIndicators];
 }
-
-- (void)zoomToRect:(CGRect)rect animated:(BOOL)animated
-{
+- (void)zoomToRect:(CGRect)rect animated:(BOOL)animated {
   [self.tableView zoomToRect:rect animated:animated];
 }
-
-
 #pragma mark - 
-
-- (NSArray *)itemsForIndexPaths:(NSArray *)indexPaths
-{
-  NSMutableArray *items = [NSMutableArray array];
-  for (NSIndexPath *indexPath in indexPaths) {
-    [items addObject:[self treeNodeForIndexPath:indexPath].item];
-  }
-  
+- (NSArray*) itemsForIndexPaths:(NSArray*)indexPaths {
+  NSMutableArray *items = @[].mutableCopy;
+  for (NSIndexPath *indexPath in indexPaths) [items addObject:[self treeNodeForIndexPath:indexPath].item];
   return [items copy];
 }
+@end
 
+@implementation RADataObject @synthesize children = _children, name = _name;
+
+- initWithName:(NSString*)name children:(NSArray*)children { return self = super.init ? _children = [NSArray arrayWithArray:children], _name = name,self : nil; }
++ dataObjectWithName:(NSString*)name children:(NSArray*)children { return [self.class.alloc initWithName:name children:children]; }
++ (NSArray*) dataObjectsWithNames:(NSArray*)names {
+  NSMutableArray *a = @[].mutableCopy;
+  for (id x in names) [a addObject:[self.class dataObjectWithName:x children:nil]];
+  return [a copy];
+}
+- (void)addChild:(id)child {
+  [[self mutableArrayValueForKey:@"children"] insertObject:child atIndex:0];
+}
+- (void)removeChild:(id)child {
+  [[self mutableArrayValueForKey:@"children"] removeObject:child];
+}
 @end

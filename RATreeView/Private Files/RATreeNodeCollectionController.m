@@ -1,80 +1,40 @@
 
-//The MIT License (MIT)
-//
-//Copyright (c) 2014 Rafał Augustyniak
-//
-//Permission is hereby granted, free of charge, to any person obtaining a copy of
-//this software and associated documentation files (the "Software"), to deal in
-//the Software without restriction, including without limitation the rights to
-//use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-//the Software, and to permit persons to whom the Software is furnished to do so,
-//subject to the following conditions:
-//
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-//FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-//COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-//IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-//CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 
 #import "RATreeNodeCollectionController.h"
 #import "RATreeNodeController.h"
-
 #import "RATreeNode.h"
 #import "RATreeNodeItem+Private.h"
-
 #import "RABatchChanges.h"
 
-
 @interface RATreeNodeCollectionController () <RATreeNodeControllerDelegate, RATreeNodeItemDataSource>
-
 @property (nonatomic, strong) RATreeNodeController *rootController;
-
 @end
 
-
 @implementation RATreeNodeCollectionController
-
-- (NSInteger)numberOfVisibleRowsForItems
-{
+- (NSInteger)numberOfVisibleRowsForItems {
   return self.rootController.numberOfVisibleDescendants;
 }
-
-- (RATreeNode *)treeNodeForIndex:(NSInteger)index
-{
+- (RATreeNode*)treeNodeForIndex:(NSInteger)index {
   return [self.rootController controllerForIndex:index].treeNode;
 }
-
-- (NSInteger)indexForItem:(id)item
-{
+- (NSInteger)indexForItem:item {
   return [self.rootController indexForItem:item];
 }
-
-- (NSInteger)lastVisibleDescendantIndexForItem:(id)item
-{
+- (NSInteger)lastVisibleDescendantIndexForItem:item {
   return [self.rootController lastVisibleDescendatIndexForItem:item];
 }
-
-- (id)parentForItem:(id)item
-{
+- (id)parentForItem:item {
   RATreeNodeController *controller = [self.rootController controllerForItem:item];
   return controller.parentController.treeNode.item;
 }
-
-- (NSInteger)levelForItem:(id)item
-{
+- (NSInteger)levelForItem:item {
   return [self.rootController controllerForItem:item].level;
 }
-
-- (id)childInParent:(id)parent atIndex:(NSInteger)index
-{
+- (id)childInParent:(id)parent atIndex:(NSInteger)index {
   RATreeNodeController *controller = [self.rootController controllerForItem:parent].childControllers[index];
   return controller.treeNode.item;
 }
-
-- (void)expandRowForItem:(id)item updates:(void (^)(NSIndexSet *))updates
-{
+- (void)expandRowForItem:item updates:(void (^)(NSIndexSet*))updates {
   NSParameterAssert(updates);
   
   RATreeNodeController *parentController = [self.rootController controllerForItem:item];
@@ -88,9 +48,7 @@
   
   updates(parentController.descendantsIndexes);
 }
-
-- (void)collapseRowForItem:(id)item updates:(void (^)(NSIndexSet *))updates
-{
+- (void)collapseRowForItem:item updates:(void (^)(NSIndexSet*))updates {
   NSParameterAssert(updates);
   
   RATreeNodeController *controller = [self.rootController controllerForItem:item];
@@ -99,16 +57,12 @@
   
   updates(deletions);
 }
-
-- (void)insertItemsAtIndexes:(NSIndexSet *)indexes inParent:(id)item
-{
+- (void)insertItemsAtIndexes:(NSIndexSet*)indexes inParent:item {
   RATreeNodeController *parentController = [self.rootController controllerForItem:item];
   NSArray *newControllers = [self controllersForNodesWithIndexes:indexes inParentController:parentController];
   [parentController insertChildControllers:newControllers atIndexes:indexes];
 }
-
-- (void)moveItemAtIndex:(NSInteger)index inParent:(id)parent toIndex:(NSInteger)newIndex inParent:(id)newParent updates:(void (^)(NSIndexSet *, NSIndexSet *))updates
-{
+- (void)moveItemAtIndex:(NSInteger)index inParent:(id)parent toIndex:(NSInteger)newIndex inParent:(id)newParent updates:(void (^)(NSIndexSet *, NSIndexSet*))updates {
   NSParameterAssert(updates);
   
   NSMutableIndexSet *removedIndexes = [NSMutableIndexSet indexSet];
@@ -135,9 +89,7 @@
   
   updates(removedIndexes, addedIndexes);
 }
-
-- (void)removeItemsAtIndexes:(NSIndexSet *)indexes inParent:(id)item updates:(void (^)(NSIndexSet *))updates
-{
+- (void)removeItemsAtIndexes:(NSIndexSet*)indexes inParent:item updates:(void (^)(NSIndexSet*))updates {
   RATreeNodeController *parentController = [self.rootController controllerForItem:item];
   
   NSMutableIndexSet *indexesToRemoval = [NSMutableIndexSet indexSet];
@@ -151,9 +103,7 @@
   
   updates(indexesToRemoval);
 }
-
-- (NSArray *)controllersForNodesWithIndexes:(NSIndexSet *)indexes inParentController:(RATreeNodeController *)parentController
-{
+- (NSArray*)controllersForNodesWithIndexes:(NSIndexSet*)indexes inParentController:(RATreeNodeController*)parentController {
   NSMutableArray *newControllers = [NSMutableArray array];
   [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
     RATreeNodeItem *lazyItem = [[RATreeNodeItem alloc] initWithParent:parentController.treeNode.item index:idx];
@@ -164,38 +114,25 @@
   
   return [newControllers copy];
 }
-
-- (NSArray *)controllersForNodes:(NSInteger)nodesNumber inParentController:(RATreeNodeController *)parentController
-{
+- (NSArray*)controllersForNodes:(NSInteger)nodesNumber inParentController:(RATreeNodeController*)parentController {
   NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, nodesNumber)];
   return [self controllersForNodesWithIndexes:indexSet inParentController:parentController];
 }
-
 #pragma mark - RATreeNodeController delegate
-
-- (id)treeNodeController:(RATreeNodeController *)controller child:(NSInteger)childIndex
-{
+- (id)treeNodeController:(RATreeNodeController*)controller child:(NSInteger)childIndex {
   return [self.dataSource treeNodeCollectionController:self child:childIndex ofItem:controller.treeNode.item];
 }
-
-- (NSInteger)numberOfChildrenForTreeNodeController:(RATreeNodeController *)controller
-{
+- (NSInteger)numberOfChildrenForTreeNodeController:(RATreeNodeController*)controller {
   return [self.dataSource treeNodeCollectionController:self numberOfChildrenForItem:controller.treeNode.item];
 }
 
-
 #pragma mark - RATreeNodeItem data source
-
-- (id)itemForTreeNodeItem:(RATreeNodeItem *)treeNodeItem
-{
+- (id)itemForTreeNodeItem:(RATreeNodeItem*)treeNodeItem {
   return [self.dataSource treeNodeCollectionController:self child:treeNodeItem.index ofItem:treeNodeItem.parent];
 }
 
-
 #pragma mark - Properties
-
-- (RATreeNodeController *)rootController
-{
+- (RATreeNodeController*)rootController {
   if (!_rootController) {
     _rootController = [[RATreeNodeController alloc] initWithParent:nil item:nil expanded:YES];
     
@@ -207,5 +144,4 @@
   
   return _rootController;
 }
-
 @end
