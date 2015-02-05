@@ -317,19 +317,20 @@
 }
 @end
 
-@implementation RADataObject @synthesize children = _children, name = _name;
+@implementation RADataObject
+//@synthesize children = _children;
 
-- initWithName:(NSString*)name children:(NSArray*)children { return self = super.init ? _children = [NSArray arrayWithArray:children], _name = name,self : nil; }
-+ dataObjectWithName:(NSString*)name children:(NSArray*)children { return [self.class.alloc initWithName:name children:children]; }
-+ (NSArray*) dataObjectsWithNames:(NSArray*)names {
-  NSMutableArray *a = @[].mutableCopy;
-  for (id x in names) [a addObject:[self.class dataObjectWithName:x children:nil]];
-  return [a copy];
-}
-- (void)addChild:(id)child {
+//- initWithObject:_ children:(NSArray*)children { return self = super.init ? _children = children ?: @[], _object = _, self : nil; }
+//+ (instancetype) dataObject:_ children:(NSArray*)children { return [self.class.alloc initWithObject:_ children:children]; }
+//+ (NSArray*) dataObjects:(NSArray*)names {
+//  NSMutableArray *a = @[].mutableCopy;
+//  for (id x in names) [a addObject:[self.class dataObject:x children:nil]];
+//  return [a copy];
+//}
+- (void)addChild:(id<RADataObject>)child {
   [[self mutableArrayValueForKey:@"children"] insertObject:child atIndex:0];
 }
-- (void)removeChild:(id)child {
+- (void)removeChild:(id<RADataObject>)child {
   [[self mutableArrayValueForKey:@"children"] removeObject:child];
 }
 @end

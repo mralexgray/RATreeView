@@ -19,39 +19,32 @@
   self.treeView = treeView;
 
   [treeView reloadData];
-  [treeView setBackgroundColor:[UIColor colorWithWhite:0.4 alpha:1.0]];
+  treeView.backgroundColor = [UIColor colorWithWhite:.4 alpha:1];
 
   [self.view insertSubview:treeView atIndex:0];
   
-  [self.navigationController setNavigationBarHidden:NO];
-  self.navigationItem.title = NSLocalizedString(@"Things", nil);
+  self.navigationController.navigationBarHidden = NO;
+  self.navigationItem.title                     = NSLocalizedString(@"Things", nil);
   [self updateNavigationItemButton];
   
-  [self.treeView registerNib:[UINib nibWithNibName:NSStringFromClass([RATableViewCell class]) bundle:nil] forCellReuseIdentifier:NSStringFromClass([RATableViewCell class])];
+  [self.treeView registerNib:[UINib nibWithNibName:NSStringFromClass(RATableViewCell.class) bundle:nil] forCellReuseIdentifier:NSStringFromClass(RATableViewCell.class)];
 }
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
-  
-//  if([[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."][0] intValue] >= 7) {
-//    CGRect statusBarViewRect = [[UIApplication sharedApplication] statusBarFrame];
-//    float heightPadding = statusBarViewRect.size.height+self.navigationController.navigationBar.frame.size.height;
-//    self.treeView.contentInset = UIEdgeInsetsMake(heightPadding, 0.0, 0.0, 0.0);
-//    self.treeView.contentOffset = CGPointMake(0.0, -heightPadding);
-//  }
-  self.treeView.frame = self.view.bounds;
-}
-#pragma mark - Actions 
 
-- (void)editButtonTapped:(id)sender {
+#pragma mark - Actions
+
+- (void) editButtonTapped:_ {
+
   [self.treeView setEditing:!self.treeView.isEditing animated:YES];
   [self updateNavigationItemButton];
 }
 
-- (void)updateNavigationItemButton {
+- (void) updateNavigationItemButton {
+
   UIBarButtonSystemItem systemItem = self.treeView.isEditing ? UIBarButtonSystemItemDone : UIBarButtonSystemItemEdit;
   self.editButton = [UIBarButtonItem.alloc initWithBarButtonSystemItem:systemItem target:self action:@selector(editButtonTapped:)];
   self.navigationItem.rightBarButtonItem = _editButton;
 }
+
 #pragma mark TreeView Delegate methods
 
 - (CGFloat) treeView:(RATreeView*)_    heightForRowForItem:item { return 44; }
@@ -90,8 +83,9 @@
 
 - (UITableViewCell*)treeView:(RATreeView*)_ cellForItem:(id<RADataObject>)item {
   
-  NSInteger level = [self.treeView levelForCellForItem:item];
-  NSInteger numberOfChildren = ((RADataObject*)item).children.count;
+  NSInteger   level = [self.treeView levelForCellForItem:item],
+   numberOfChildren = item.children.count;
+
   NSString *detailText = [NSString localizedStringWithFormat:@"Number of children %@", [@(numberOfChildren) stringValue]];
   BOOL expanded = [self.treeView isCellForItemExpanded:item];
   
@@ -100,10 +94,11 @@
   cell.selectionStyle = UITableViewCellSelectionStyleNone;
   
   __weak typeof(self) weakSelf = self;
+
   cell.additionButtonTapAction = ^(id sender){
-    if (![weakSelf.treeView isCellForItemExpanded:item] || weakSelf.treeView.isEditing) {
-      return;
-    }
+
+    if (![weakSelf.treeView isCellForItemExpanded:item] || weakSelf.treeView.isEditing) return;
+
     RADataObject *newDataObject = [RADataObject dataObjectWithName:@"Added value" children:@[]];
     [item addChild:newDataObject];
     [weakSelf.treeView insertItemsAtIndexes:[NSIndexSet indexSetWithIndex:0] inParent:item withAnimation:RATreeViewRowAnimationLeft];
@@ -114,11 +109,11 @@
 }
 - (NSInteger)       treeView:(RATreeView*)_ numberOfChildrenOfItem:(id<RADataObject>)item {
 
-    return !item ? self.data.count : item.children.count;
+    return !item ? _data.count : item.children.count;
 }
 -                   treeView:(RATreeView*)_ child:(NSInteger)index ofItem:(id<RADataObject>)item {
 
-  return !item ? self.data[index] : item.children[index];
+  return !item ? _data[index] : item.children[index];
 }
 
 #pragma mark - Helpers
@@ -152,3 +147,16 @@
   self.data = @[phone, computer, car, bike, house, flats, motorbike, drinks, food, sweets, watches, walls];
 }
 @end
+
+
+//- (void)viewWillAppear:(BOOL)animated {
+//  [super viewWillAppear:animated];
+//  
+////  if([[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."][0] intValue] >= 7) {
+////    CGRect statusBarViewRect = [[UIApplication sharedApplication] statusBarFrame];
+////    float heightPadding = statusBarViewRect.size.height+self.navigationController.navigationBar.frame.size.height;
+////    self.treeView.contentInset = UIEdgeInsetsMake(heightPadding, 0.0, 0.0, 0.0);
+////    self.treeView.contentOffset = CGPointMake(0.0, -heightPadding);
+////  }
+//  self.treeView.frame = self.view.bounds;
+//}

@@ -37,13 +37,8 @@
 		7B8B72F51A6E08DC0073D4DE /* RATreeView+UIScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B59F7328198D6E42006BAED0 /* RATreeView+UIScrollView.m */; };
 		7B8B72F61A6E08DC0073D4DE /* RATreeView_ClassExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = B59F7329198D6E42006BAED0 /* RATreeView_ClassExtension.h */; };
 		7BE96C7E1A6DC4B4007DA5F3 /* RATreeView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE96C731A6DC4B4007DA5F3 /* RATreeView.framework */; };
-		7BE96C871A6DC4B4007DA5F3 /* RATreeViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BE96C861A6DC4B4007DA5F3 /* RATreeViewTests.m */; };
 		7BE96C8A1A6DC4B4007DA5F3 /* RATreeView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE96C731A6DC4B4007DA5F3 /* RATreeView.framework */; };
 		7BE96C8B1A6DC4B4007DA5F3 /* RATreeView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE96C731A6DC4B4007DA5F3 /* RATreeView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B535574C1801AC4700390489 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B535574B1801AC4700390489 /* QuartzCore.framework */; };
-		B53B974417D3840800A05E2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53B974317D3840800A05E2F /* UIKit.framework */; };
-		B53B974617D3840800A05E2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53B974517D3840800A05E2F /* Foundation.framework */; };
-		B53B974817D3840800A05E2F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53B974717D3840800A05E2F /* CoreGraphics.framework */; };
 		B53B97C717D3C22D00A05E2F /* RAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B53B97C217D3C22D00A05E2F /* RAAppDelegate.m */; };
 		B53B97C917D3C22D00A05E2F /* RAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B53B97C617D3C22D00A05E2F /* RAViewController.m */; };
 		B59F730C198D6D5F006BAED0 /* RATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59F730A198D6D5F006BAED0 /* RATableViewCell.m */; };
@@ -96,15 +91,9 @@
 		7BE96C731A6DC4B4007DA5F3 /* RATreeView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RATreeView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BE96C761A6DC4B4007DA5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 		7BE96C7D1A6DC4B4007DA5F3 /* RATreeViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RATreeViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BE96C851A6DC4B4007DA5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7BE96C861A6DC4B4007DA5F3 /* RATreeViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RATreeViewTests.m; sourceTree = "<group>"; };
-		B535574B1801AC4700390489 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B53B974017D3840800A05E2F /* RATreeViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RATreeViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B53B974317D3840800A05E2F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		B53B974517D3840800A05E2F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		B53B974717D3840800A05E2F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		B53B976917D3843600A05E2F /* RATreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RATreeView.h; sourceTree = "<group>"; };
-		B53B976A17D3843600A05E2F /* RATreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RATreeView.m; sourceTree = "<group>"; };
+		B53B976917D3843600A05E2F /* RATreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = RATreeView.h; path = RATreeView/RATreeView.h; sourceTree = "<group>"; };
+		B53B976A17D3843600A05E2F /* RATreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RATreeView.m; path = RATreeView/RATreeView.m; sourceTree = "<group>"; };
 		B53B97C217D3C22D00A05E2F /* RAAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RAAppDelegate.m; path = Demo/RAAppDelegate.m; sourceTree = "<group>"; };
 		B53B97C517D3C22D00A05E2F /* RAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RAViewController.h; path = Demo/RAViewController.h; sourceTree = "<group>"; };
 		B53B97C617D3C22D00A05E2F /* RAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RAViewController.m; path = Demo/RAViewController.m; sourceTree = "<group>"; };
@@ -167,56 +156,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BE96C8A1A6DC4B4007DA5F3 /* RATreeView.framework in Frameworks */,
-				B535574C1801AC4700390489 /* QuartzCore.framework in Frameworks */,
-				B53B974417D3840800A05E2F /* UIKit.framework in Frameworks */,
-				B53B974617D3840800A05E2F /* Foundation.framework in Frameworks */,
-				B53B974817D3840800A05E2F /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7BE96C741A6DC4B4007DA5F3 /* RATreeView */ = {
-			isa = PBXGroup;
-			children = (
-				7BE96C751A6DC4B4007DA5F3 /* Supporting Files */,
-			);
-			path = RATreeView;
-			sourceTree = "<group>";
-		};
-		7BE96C751A6DC4B4007DA5F3 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		7BE96C831A6DC4B4007DA5F3 /* RATreeViewTests */ = {
-			isa = PBXGroup;
-			children = (
-				7BE96C861A6DC4B4007DA5F3 /* RATreeViewTests.m */,
-				7BE96C841A6DC4B4007DA5F3 /* Supporting Files */,
-			);
-			path = RATreeViewTests;
-			sourceTree = "<group>";
-		};
-		7BE96C841A6DC4B4007DA5F3 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7BE96C851A6DC4B4007DA5F3 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		B53B973717D3840800A05E2F = {
 			isa = PBXGroup;
 			children = (
+				B53B976917D3843600A05E2F /* RATreeView.h */,
+				B53B976A17D3843600A05E2F /* RATreeView.m */,
+				B59F730E198D6E42006BAED0 /* Private Files */,
 				B53B978B17D3856F00A05E2F /* Demo */,
-				B53B974917D3840800A05E2F /* RATreeView */,
-				7BE96C741A6DC4B4007DA5F3 /* RATreeView */,
-				7BE96C831A6DC4B4007DA5F3 /* RATreeViewTests */,
-				B53B974217D3840800A05E2F /* Frameworks */,
 				B53B974117D3840800A05E2F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -229,27 +181,6 @@
 				7BE96C7D1A6DC4B4007DA5F3 /* RATreeViewTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B53B974217D3840800A05E2F /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				B535574B1801AC4700390489 /* QuartzCore.framework */,
-				B53B974317D3840800A05E2F /* UIKit.framework */,
-				B53B974517D3840800A05E2F /* Foundation.framework */,
-				B53B974717D3840800A05E2F /* CoreGraphics.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B53B974917D3840800A05E2F /* RATreeView */ = {
-			isa = PBXGroup;
-			children = (
-				B53B976917D3843600A05E2F /* RATreeView.h */,
-				B53B976A17D3843600A05E2F /* RATreeView.m */,
-				B59F730E198D6E42006BAED0 /* Private Files */,
-			);
-			path = RATreeView;
 			sourceTree = "<group>";
 		};
 		B53B974A17D3840800A05E2F /* Supporting Files */ = {
@@ -312,7 +243,8 @@
 				B59F7329198D6E42006BAED0 /* RATreeView_ClassExtension.h */,
 				7BE96C761A6DC4B4007DA5F3 /* Info.plist */,
 			);
-			path = "Private Files";
+			name = "Private Files";
+			path = "RATreeView/Private Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -492,7 +424,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BE96C871A6DC4B4007DA5F3 /* RATreeViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +466,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -571,6 +503,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -667,7 +600,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -699,7 +632,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
